@@ -1,0 +1,95 @@
+1.EDA(Exploring Data Analysis):
+First, we look at the data to understand it.
+
+We check:
+How many rows & columns?
+What type of data is there?
+Any Patterns?
+2. OLAP Analysis:
+We analyze data from different perspectives.
+
+Example:
+Which warehouse causes delays?
+Which shipment mode is fastest?
+Which products arrive late?
+
+3.Data Cleaning:
+Fix messy or incorrect data.
+
+We:
+remove duplicates
+fix wrong values
+correct spelling issues
+
+4.Handling Missing Values:
+
+Sometimes data is empty.
+
+We can:
+fill with average values
+replace with “Unknown”
+remove if needed
+
+5.Outlier Detection:
+Find unusual values.
+
+
+6.Features Scaling:
+Make numbers comparable.
+
+7.Skewness Analysis:
+
+Check if data is uneven.
+If most values are small but few are huge → skewed.
+
+8.Feature Encoding:
+Convert words into numbers.
+
+For Example:
+Male -> 0
+Female -> 1
+Flight -> column
+
+9.Data Transformation:
+
+Change data to make it better.
+
+10.Dimensionality Reduction:
+Reduce number of columns.
+
+11.Feature Selection:
+Keep only important columns.
+Removes:
+useless data
+repeated info
+
+12.Statistical Analysis:
+Understand data using numbers.
+We study:
+average
+variation
+relationships
+
+13.Data Visualization:
+Show data using charts.
+Examples:
+bar chart
+histogram
+
+
+14.Pipeline Architecture:
+Automates all steps.
+
+Flow Chart:
+
+Raw Data
+⬇
+Cleaning
+⬇
+Fix missing values
+⬇
+Remove outliers
+⬇
+Encode & scale
+⬇
+Train model.
