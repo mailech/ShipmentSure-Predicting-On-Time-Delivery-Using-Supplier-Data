@@ -131,3 +131,21 @@ This guide provides a detailed analysis of the concepts, tools, and methodologie
 3. **Pivot Table Synthesis**: Generated matrix views to compare average customer ratings against shipment modes, identifying operational weak points.
 
 ---
+
+## 8. Gradient Boosting for Predictive Performance
+**Notebook**: [xgboost_model.ipynb](./xgboost_model.ipynb)
+
+### Concepts
+- **XGBoost (Extreme Gradient Boosting)**: A high-performance ensemble learning algorithm based on gradient-boosted decision trees.
+- **Regularization (L1 & L2)**: Built-in penalties to control model complexity and prevent overfitting, often superior to standard Gradient Boosting.
+- **Handling Missing Values**: An "sparsity-aware" algorithm that automatically learns the best imputation direction for missing data during training.
+- **Feature Importance**: Uses metrics like `Gain` (contribution of a feature to the model's accuracy) or `Weight` (number of times a feature is used in trees) to interpret the model.
+- **Parallel Processing**: Optimized for system resource utilization, allowing for faster training on large datasets compared to traditional GBDT implementations.
+
+### Methodology
+1. **Targeted Preprocessing**: Focused on dropping non-predictive columns (`ID`) and implementing One-Hot Encoding for categorical features.
+2. **Baseline Model Development**: Initialized an `XGBClassifier` with a low learning rate and moderate tree depth to establish a performance baseline.
+3. **Hyperparameter Optimization**: Used `RandomizedSearchCV` to efficiently explore a large parameter space (learning rate, depth, subsample, gamma) without the computational cost of an exhaustive grid search.
+4. **Performance Profiling**: Analyzed the model using Confusion Matrices and Feature Importance plots to ensure predictors like `Discount_offered` and `Weight_in_gms` were correctly prioritized.
+
+---
