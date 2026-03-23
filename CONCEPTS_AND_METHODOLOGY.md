@@ -163,8 +163,115 @@ All these concepts work together in a single journey:
 10. **Train** your machine learning model
 11. **Predict** on-time delivery!
 
+---
 
+## Notebook-Wise Concepts and Methods (With Unique Project Purpose)
+
+This section explains **why each function/method was used in this project workflow**, not just what it does in general.
+
+### 1. `Data_Clean.ipynb`
+- `describe()`, `info()`, `dtypes`, `select_dtypes()`: Used to build the first reliability baseline of the dataset before any transformation decision.
+- `isnull().sum()`, `duplicated().sum()`, `nunique()`: Used to detect operational data quality risks (missingness, repeated shipments, high-cardinality columns).
+- `corr(numeric_only=True)`, `sns.heatmap()`, `sns.boxplot()`: Used to identify correlated and outlier-sensitive variables that could distort model behavior later.
+
+### 2. `EDA.ipynb`
+- `read_csv()`, `head()`, `describe()`, `isnull().sum()`: Used for rapid dataset orientation and quick validation that source data loaded correctly.
+- `sns.countplot()`: Used to inspect target imbalance in `Reached.on.Time_Y.N` early, which informs model evaluation strategy.
+
+### 3. `Full_Dataset_Study.ipynb`
+- `shape`, `info()`, `describe()`: Used to create a complete structural profile before deeper engineering.
+- `skew()`, `value_counts(normalize=True)`: Used to decide which features need transformation and which categories dominate shipment behavior.
+- `groupby().agg()`, `groupby().mean()`, `plt.pie()`, `plt.plot()`, `sns.histplot()`: Used to convert raw columns into business-facing summaries (mode-wise, warehouse-wise, delivery-rate-wise).
+
+### 4. `Data_Analysis.ipynb`
+- `groupby().mean()`, `pivot_table()`: Used for cross-dimensional operational comparisons (warehouse x shipment mode x rating/delivery behavior).
+- `plt.scatter()`, `sns.scatterplot()`, `sns.barplot()`, `sns.heatmap()`: Used to visualize relationship strength and segment-level performance patterns.
+
+### 5. `OLAP_Data_Analysis.ipynb`
+- Boolean filtering (`df[condition]`, multi-condition dice): Used for OLAP-style slice and dice analysis on specific operational scenarios.
+- `groupby().agg()`, `pivot_table()`: Used for roll-up/drill-down style metric aggregation across multiple logistics dimensions.
+- `sns.heatmap(annot=True)`: Used to make matrix-level performance differences visible for stakeholder interpretation.
+
+### 6. `Data_Skewness_Statistical_Analysis.ipynb`
+- `skew()`, `mean()`, `median()`, `mode()`: Used to measure non-normality and decide transformation urgency for cost/discount variables.
+- `sns.histplot(kde=True)`, `sns.boxplot()`: Used to validate skewness and outlier behavior visually before transformation.
+- `sns.histplot(..., hue='Reached.on.Time_Y.N')`: Used to check if distribution shifts align with delivery outcomes.
+
+### 7. `Categorical_Encoding.ipynb`
+- Custom `CategoryReducer` and `RareLabelEncoder` (with `BaseEstimator`, `TransformerMixin`): Used to merge low-frequency labels into `Other`, reducing sparse noise before encoding.
+- `fit/transform` pattern: Used to maintain consistent category treatment between training and inference contexts.
+
+### 8. `Cyclic_Encoding_And_Discretization(26.2).ipynb`
+- `np.sin()`, `np.cos()`, `np.pi`: Used to encode `Order_Hour` cyclically so hour 23 and hour 0 are treated as neighbors.
+- `pd.cut()`, `pd.qcut()`, `KBinsDiscretizer(...)`: Used to compare three binning strategies and select discretization aligned with distribution shape.
+
+### 9. `Feature_Hashing_Generation(25.2).ipynb`
+- `FeatureHasher(n_features=...)`: Used to compress high-cardinality categorical information into fixed-width numeric space.
+- `agg(' '.join, axis=1)`, `split()`: Used to create combined categorical tokens and capture cross-category interactions through hashing.
+- `PolynomialFeatures(degree=2, interaction_only=True)`: Used to generate interaction signals (e.g., cost x discount) without exploding squared terms.
+- `concat(axis=1)`: Used to merge engineered blocks into one model-ready feature table.
+
+### 10. `Feature_Selection_PCA(3.3).ipynb`
+- `get_dummies(drop_first=True)`: Used to convert categories while controlling multicollinearity in linear-style setups.
+- `SelectKBest(f_classif, k=...)`, `get_support()`: Used to keep statistically strongest predictors for on-time delivery classification.
+- `StandardScaler()` + `PCA(n_components=2)`: Used to reduce dimensional complexity while preserving dominant variance structure.
+- `RandomForestClassifier()`, `feature_importances_`: Used to validate useful signal even after dimensionality reduction.
+
+### 11. `KMeans_KBest_FeatureSelection(2.3).ipynb`
+- `StandardScaler()`, `KMeans(...).fit_predict()`: Used to segment shipment profiles into natural operational clusters.
+- `groupby().mean()`, `sns.countplot()`: Used to profile cluster characteristics and cluster size balance.
+- `SelectKBest(f_classif, k=5)`: Used to identify top supervised features alongside unsupervised cluster exploration.
+
+### 12. `KMeans_LogTransform(28.2).ipynb`
+- `np.log1p()`: Used to stabilize heavily right-skewed cost/discount features before clustering.
+- `StandardScaler()`, `KMeans(n_init=10)`: Used to produce stable and comparable cluster partitions.
+- `describe()`, `sns.boxplot()`, `sns.histplot()`: Used to compare pre/post transformation behavior and interpret each resulting cluster.
+
+### 13. `Data_Preprocessing(24.2).ipynb`
+- `KNNImputer`, `IterativeImputer`, `SimpleImputer`: Used as a comparative imputation study to handle different missingness patterns.
+- `RobustScaler`, `MinMaxScaler`, `PowerTransformer`, `QuantileTransformer`: Used to benchmark multiple normalization/transformation choices under outliers and skewness.
+- `IsolationForest(contamination=...)`: Used to remove anomaly-driven noise before major transformations.
+- `OrdinalEncoder`, `FeatureHasher`, `PolynomialFeatures`, `KBinsDiscretizer`: Used to encode categories, build compact features, create interactions, and discretize continuous predictors.
+- `VarianceThreshold`, `SelectKBest`, `PCA`: Used to reduce redundant dimensions and retain predictive structure.
+
+### 14. `Data_Pipeline_Preprocessing.ipynb`
+- `Pipeline`, `ColumnTransformer`: Used to enforce reproducible, column-wise preprocessing for train/test consistency.
+- `SimpleImputer(strategy='median'/'most_frequent')`: Used to apply type-specific imputation rules for numeric vs categorical columns.
+- `StandardScaler`, `OneHotEncoder(handle_unknown='ignore')`: Used to standardize numeric distributions and safely encode unseen categories in inference.
+
+### 15. `PreprocessingEngine_(16.3)AnamolyDetection.ipynb`
+- Preprocessing engine structure (pipeline-driven transforms): Used to centralize reusable preprocessing logic.
+- Anomaly detection methods (IsolationForest-style workflow): Used to flag rare shipment behavior that can degrade general model performance.
+
+### 16. `FeatureUnion_TargetTransform(6.3).ipynb`
+- `FeatureUnion` with PCA path + SelectKBest path: Used to combine complementary feature views (variance-based + label-signal-based).
+- `TransformedTargetRegressor(LinearRegression, func=np.log1p, inverse_func=np.expm1)`: Used to train in log-space and predict on original scale for skewed targets.
+- `train_test_split(...)`: Used to evaluate this hybrid feature strategy with a reproducible holdout split.
+
+### 17. `LogisticRegression_(9.3)RandomForest.ipynb`
+- `LogisticRegression`: Used as a linear, interpretable baseline for delivery classification.
+- `RandomForestClassifier`: Used as a non-linear benchmark to capture interactions and non-linear boundaries.
+- Classification metrics workflow (accuracy/precision/recall/confusion-matrix style): Used to compare model behavior beyond one single score.
+
+### 18. `XgBoost(11.3)Model.ipynb`
+- `XGBClassifier`/XGBoost training workflow: Used for boosted-tree modeling to capture complex feature interactions at high predictive strength.
+- Evaluation and feature importance checks: Used to validate both performance and practical feature contribution.
+
+### 19. `Data_Visualization.ipynb`
+- `sns.countplot(...)` with and without `hue`: Used to compare class distribution across shipment and warehouse categories.
+- `sns.boxplot(...)`: Used to detect continuous-feature behavior shifts between on-time and delayed shipments.
+- Subplot grid patterns: Used to standardize side-by-side EDA comparisons for faster insight review.
 
 ---
 
-**Version**: 2.0 | **Last Updated**: March 2026 | **Project**: ShipmentSure-Aanchal Yadav
+## Methodology Flow Across Notebooks
+
+1. **Profile and audit data quality** (`Data_Clean`, `EDA`, `Full_Dataset_Study`)
+2. **Analyze business patterns and OLAP views** (`Data_Analysis`, `OLAP_Data_Analysis`)
+3. **Diagnose skewness/outliers and transform distributions** (`Data_Skewness_Statistical_Analysis`, `Data_Preprocessing`)
+4. **Encode/engineer/select features** (`Categorical_Encoding`, `Cyclic_Encoding...`, `Feature_Hashing_Generation`, `Feature_Selection_PCA`, `FeatureUnion_TargetTransform`)
+5. **Cluster for segmentation insight** (`KMeans_KBest_FeatureSelection`, `KMeans_LogTransform`)
+6. **Train supervised models and compare** (`LogisticRegression...`, `XgBoost...`)
+7. **Maintain reproducibility through pipelines** (`Data_Pipeline_Preprocessing`, `PreprocessingEngine...`)
+
+**Last Updated**: March 2026 | **Project**: ShipmentSure-Aanchal Yadav
