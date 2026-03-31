@@ -2,3 +2,6 @@
 Train.csv
 Synthetic-Data.xlsx
 data/
+# Python cache artifacts
+_pycache_/
+*.py[cod]
