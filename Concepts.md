@@ -217,10 +217,3 @@ A complete ML pipeline includes:
 
 ---
 
-##  Last Updated
-
-March 2026
-
-## Project
-
-ShipmentSure – Aanchal Yadav
