@@ -210,7 +210,9 @@ A complete ML pipeline includes:
 * Profile and audit data quality (Data_Clean, EDA, Full_Dataset_Study)
 * Analyze business patterns and OLAP views (Data_Analysis, OLAP_Data_Analysis)
 * Diagnose skewness/outliers and transform distributions (Data_Skewness_Statistical_Analysis Data_Preprocessing)
+
 * Encode/engineer/select features (Categorical_Encoding, Cyclic_Encoding..., Feature_Hashing_Generation, Feature_Selection_PCA, FeatureUnion_TargetTransform)
+
 * Cluster for segmentation insight (KMeans_KBest_FeatureSelection, KMeans_LogTransform)
 * Train supervised models and compare (LogisticRegression..., XgBoost...)
 * Maintain reproducibility through pipelines (Data_Pipeline_Preprocessing, PreprocessingEngine...)
