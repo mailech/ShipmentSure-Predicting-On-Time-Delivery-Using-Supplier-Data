@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShipmentSure | Delivery Intelligence</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="topbar reveal">
+      <div class="brand-wrap">
+        <p class="brand-kicker">Logistics ML Console</p>
+        <h1 class="brand-title">ShipmentSure</h1>
+      </div>
+      <div class="model-lock">
+        <span class="dot"></span>
+        Model Locked: Existing Artifacts Only
+      </div>
+    </header>
+
+    <section class="hero reveal delay-1">
+      <h2>Predict Delivery Outcomes With Precision and Style</h2>
+      <p>
+        A full-stack prediction console wired to your trained ShipmentSure pipeline.
+        No retraining. No model edits. Just fast inference and a bold golden-black experience.
+      </p>
+      <div class="hero-tags">
+        <span>FastAPI Backend</span>
+        <span>Dynamic Form Schema</span>
+        <span>Live Probability Output</span>
+      </div>
+    </section>
+
+    <section class="layout-grid">
+      <article class="panel input-panel reveal delay-2">
+        <div class="panel-head">
+          <h3>Shipment Input</h3>
+          <button id="fill-defaults" type="button" class="ghost-btn">Load Median Sample</button>
+        </div>
+        <p class="panel-subtitle">Provide shipment details to generate a model prediction.</p>
+
+        <div id="form-state" class="status-banner">Loading input schema...</div>
+
+        <form id="prediction-form" class="prediction-form" novalidate></form>
+      </article>
+
+      <article class="panel output-panel reveal delay-3">
+        <div class="panel-head">
+          <h3>Model Signal</h3>
+          <span id="api-status" class="pill neutral">Checking API</span>
+        </div>
+        <p class="panel-subtitle">Prediction confidence and class probability split.</p>
+
+        <div id="result-empty" class="result-empty">
+          <p>Run a prediction to see model output and confidence levels.</p>
+        </div>
+
+        <div id="result-content" class="result-content hidden">
+          <div id="score-ring" class="score-ring" style="--score: 0%;">
+            <div class="score-inner">
+              <p class="score-label">Confidence</p>
+              <p id="confidence-value" class="score-value">0%</p>
+            </div>
+          </div>
+
+          <div class="prediction-main">
+            <p id="prediction-label" class="prediction-label">Target class</p>
+            <p id="prediction-class" class="prediction-class">--</p>
+            <p id="prediction-message" class="prediction-message"></p>
+          </div>
+
+          <div>
+            <h4>Class Probabilities</h4>
+            <div id="probability-bars" class="probability-bars"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="reveal delay-4">
+      <p>
+        ShipmentSure Web Console | Built on your existing pipeline and model files without modification.
+      </p>
+    </footer>
+  </main>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
