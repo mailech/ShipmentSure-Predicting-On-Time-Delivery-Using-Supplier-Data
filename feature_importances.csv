@@ -1,0 +1,17 @@
+Feature,Importance
+Discount_offered,0.7132445
+Prior_purchases,0.05479279
+Weight_in_gms,0.05324476
+Customer_care_calls,0.019799855
+Mode_of_Shipment_Road,0.01935034
+Mode_of_Shipment_Ship,0.016994594
+Mode_of_Shipment_Flight,0.016387133
+Warehouse_block_D,0.0150530385
+Product_importance_low,0.014357334
+Warehouse_block_C,0.013655125
+Customer_rating,0.012943529
+Warehouse_block_B,0.012906497
+Product_importance_high,0.011173557
+Warehouse_block_F,0.010468687
+Product_importance_medium,0.007908448
+Warehouse_block_A,0.007719849

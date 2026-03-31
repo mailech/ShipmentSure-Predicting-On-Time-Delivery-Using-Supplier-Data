@@ -1,0 +1,15 @@
+TEST CASE 1 (High Priority / On-Time Candidate):
+{
+  "confidence": "High",
+  "prediction": "ON TIME",
+  "probability": 0.9731,
+  "risk_level": "Low"
+}
+
+TEST CASE 2 (Low Priority / Delayed Candidate):
+{
+  "confidence": "Medium",
+  "prediction": "DELAYED",
+  "probability": 0.6494,
+  "risk_level": "High"
+}
