@@ -3,7 +3,7 @@ body {
     font-family: Arial;
 }
 
-/* NAVBAR */
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -23,7 +23,7 @@ body {
     text-decoration: none;
 }
 
-/* HERO */
+
 .hero {
     text-align: center;
     padding: 80px 20px;
@@ -39,7 +39,7 @@ body {
     border-radius: 8px;
 }
 
-/* PREDICT SECTION */
+
 .predict-section {
     padding: 40px;
     text-align: center;
@@ -68,7 +68,7 @@ button {
     cursor: pointer;
 }
 
-/* RESULT */
+
 .result-box {
     margin-top: 20px;
     font-size: 20px;
@@ -83,14 +83,14 @@ button {
     color: red;
 }
 
-/* ABOUT */
+
 .about {
     padding: 40px;
     background: #f1f5f9;
     text-align: center;
 }
 
-/* FOOTER */
+
 footer {
     text-align: center;
     padding: 20px;
