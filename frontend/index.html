@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShipmentSure</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h2>🚚 ShipmentSure</h2>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#predict">Predict</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>Predict Delivery Performance</h1>
+    <p>AI-powered system to check if your shipment will be on time</p>
+    <a href="#predict" class="btn">Start Prediction</a>
+</section>
+
+<!-- PREDICTION SECTION -->
+<section id="predict" class="predict-section">
+
+    <h2>Enter Shipment Details</h2>
+
+    <form id="form">
+
+        <div class="grid">
+            <input type="number" id="ID" placeholder="Shipment ID">
+            
+            <select id="Warehouse_block">
+                <option>A</option><option>B</option><option>C</option><option>D</option><option>F</option>
+            </select>
+
+            <select id="Mode_of_Shipment">
+                <option>Flight</option><option>Road</option><option>Ship</option>
+            </select>
+
+            <input type="number" id="Customer_care_calls" placeholder="Customer Calls">
+            <input type="number" id="Customer_rating" placeholder="Rating">
+            <input type="number" id="Cost_of_the_Product" placeholder="Cost">
+            <input type="number" id="Prior_purchases" placeholder="Prior Purchases">
+
+            <select id="Product_importance">
+                <option>low</option><option>medium</option><option>high</option>
+            </select>
+
+            <select id="Gender">
+                <option>M</option><option>F</option>
+            </select>
+
+            <input type="number" id="Discount_offered" placeholder="Discount">
+            <input type="number" id="Weight_in_gms" placeholder="Weight">
+        </div>
+
+        <button type="submit">Predict 🚀</button>
+    </form>
+
+    <div id="result" class="result-box"></div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+    <h2>About ShipmentSure</h2>
+    <p>
+        ShipmentSure uses Machine Learning to predict whether a delivery will be on time 
+        based on logistics and customer data.
+    </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 ShipmentSure | Built with FastAPI & ML</p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

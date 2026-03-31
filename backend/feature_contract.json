@@ -1,0 +1,34 @@
+{
+  "contract_version": "1.0",
+  "engineered_feature_order": [
+    "ID",
+    "Customer_care_calls",
+    "Customer_rating",
+    "Cost_of_the_Product",
+    "Prior_purchases",
+    "Discount_offered",
+    "Weight_in_gms",
+    "Warehouse_block_B",
+    "Warehouse_block_C",
+    "Warehouse_block_D",
+    "Warehouse_block_F",
+    "Mode_of_Shipment_Road",
+    "Mode_of_Shipment_Ship",
+    "Product_importance_low",
+    "Product_importance_medium",
+    "Gender_M"
+  ],
+  "raw_input_fields": [
+    "ID",
+    "Warehouse_block",
+    "Mode_of_Shipment",
+    "Customer_care_calls",
+    "Customer_rating",
+    "Cost_of_the_Product",
+    "Prior_purchases",
+    "Product_importance",
+    "Gender",
+    "Discount_offered",
+    "Weight_in_gms"
+  ]
+}
