@@ -20,6 +20,11 @@ except Exception as e:
     model = None
 
 
+@app.route('/api/ping', methods=['GET'])
+def ping():
+    """Lightweight endpoint to wake up Render container and keep it alive."""
+    return jsonify({"status": "awake", "message": "Backend is ready!"}), 200
+
 @app.route('/api/predict', methods=['POST'])
 def predict():
     if not model:

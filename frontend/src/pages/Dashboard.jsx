@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InputForm from '../components/InputForm';
 import PredictionCard from '../components/PredictionCard';
 import PredictionHistory from '../components/PredictionHistory';
-import { predictDelivery } from '../services/api';
+import { predictDelivery, pingBackend } from '../services/api';
 import { Info } from 'lucide-react';
 
 const Dashboard = () => {
@@ -12,8 +12,12 @@ const Dashboard = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [lastInput, setLastInput] = useState(null);
 
-  // Load history from localStorage on initial render
+  // Load history from localStorage on initial render and explicitly wake up the backend
   useEffect(() => {
+    // 1. Silent Ping to wake up Render backend
+    pingBackend();
+
+    // 2. Load History
     const saved = localStorage.getItem('shipmentsure_history');
     if (saved) {
       try {
