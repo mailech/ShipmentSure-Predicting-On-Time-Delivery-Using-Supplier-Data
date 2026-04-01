@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShipmentSure</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="app">
+    <h1>🚀 ShipmentSure</h1>
+
+    <form id="form">
+        <input type="number" id="Customer_care_calls" placeholder="Customer Calls">
+        <input type="number" id="Customer_rating" placeholder="Rating">
+        <input type="number" id="Cost_of_the_Product" placeholder="Cost">
+        <input type="number" id="Prior_purchases" placeholder="Purchases">
+        <input type="number" id="Discount_offered" placeholder="Discount">
+        <input type="number" id="Weight_in_gms" placeholder="Weight">
+
+        <select id="Gender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select>
+
+        <select id="Warehouse_block">
+            <option>A</option><option>B</option><option>C</option>
+        </select>
+
+        <select id="Mode_of_Shipment">
+            <option>Ship</option><option>Flight</option><option>Road</option>
+        </select>
+
+        <select id="Product_importance">
+            <option>low</option><option>medium</option><option>high</option>
+        </select>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <h2 id="result"></h2>
+</div>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>
