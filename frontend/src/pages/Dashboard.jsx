@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [lastInput, setLastInput] = useState(null);
 
   // Load history from localStorage on initial render
   useEffect(() => {
@@ -29,6 +30,7 @@ const Dashboard = () => {
     try {
       const data = await predictDelivery(formData);
       setResult(data);
+      setLastInput(formData);
 
       // Update history
       const newRecord = {
@@ -40,6 +42,20 @@ const Dashboard = () => {
       setHistory(updatedHistory);
       localStorage.setItem('shipmentsure_history', JSON.stringify(updatedHistory));
 
+    } catch (error) {
+      setErrorMsg(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleWhatIf = async (modifiedData) => {
+    setIsLoading(true);
+    setErrorMsg('');
+    try {
+      const data = await predictDelivery(modifiedData);
+      setResult(data);
+      setLastInput(modifiedData);
     } catch (error) {
       setErrorMsg(error.message);
     } finally {
@@ -85,8 +101,13 @@ const Dashboard = () => {
         </div>
 
         {/* RIGHT PANEL: OUTPUT */}
-        <div className="lg:col-span-5 flex flex-col">
-          <PredictionCard result={result} />
+        <div className="lg:col-span-5 flex flex-col gap-8">
+          <PredictionCard 
+            result={result} 
+            lastInput={lastInput} 
+            onWhatIf={handleWhatIf} 
+            isLoading={isLoading} 
+          />
 
           {history.length > 0 && (
             <PredictionHistory history={history} />

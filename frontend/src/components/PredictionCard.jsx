@@ -1,9 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldAlert, ShieldCheck, Gauge } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, Gauge, SlidersHorizontal, RefreshCw } from 'lucide-react';
 
-const PredictionCard = ({ result }) => {
+const PredictionCard = ({ result, lastInput, onWhatIf, isLoading }) => {
   const [animatedProb, setAnimatedProb] = useState(0);
+  const [whatIfData, setWhatIfData] = useState(lastInput);
+  const [isTweaked, setIsTweaked] = useState(false);
 
+  useEffect(() => {
+    if (lastInput && !isTweaked) {
+      setWhatIfData(lastInput);
+    }
+  }, [lastInput, isTweaked]);
+
+  const handleSliderChange = (e) => {
+    const { name, value } = e.target;
+    setWhatIfData(prev => ({ ...prev, [name]: Number(value) }));
+    setIsTweaked(true);
+  };
+
+  const applyWhatIf = () => {
+    if (onWhatIf && whatIfData) {
+      onWhatIf(whatIfData);
+      setIsTweaked(false);
+    }
+  };
   useEffect(() => {
     if (!result) return;
     
@@ -79,6 +99,67 @@ const PredictionCard = ({ result }) => {
          </div>
       </div>
       
+      {/* WHAT-IF SCENARIOS */}
+      {whatIfData && (
+        <div className="bg-white border-4 border-black p-6 shadow-neo-sm mt-2 relative">
+           <h3 className="text-xl font-black uppercase mb-4 flex items-center gap-2">
+             <SlidersHorizontal size={24} /> What-If Analysis
+           </h3>
+           
+           <div className="flex flex-col gap-4">
+             {/* Discount Slider */}
+             <div>
+               <div className="flex justify-between font-bold mb-1">
+                 <label className="text-sm uppercase tracking-wide">Discount Offered</label>
+                 <span>{whatIfData.Discount_offered}%</span>
+               </div>
+               <input 
+                 type="range" 
+                 name="Discount_offered" 
+                 min="0" 
+                 max="65" 
+                 value={whatIfData.Discount_offered} 
+                 onChange={handleSliderChange}
+                 className="w-full accent-black cursor-pointer"
+               />
+             </div>
+             
+             {/* Weight Slider */}
+             <div>
+               <div className="flex justify-between font-bold mb-1">
+                 <label className="text-sm uppercase tracking-wide">Weight (g)</label>
+                 <span>{whatIfData.Weight_in_gms}g</span>
+               </div>
+               <input 
+                 type="range" 
+                 name="Weight_in_gms" 
+                 min="1000" 
+                 max="10000" 
+                 step="100"
+                 value={whatIfData.Weight_in_gms} 
+                 onChange={handleSliderChange}
+                 className="w-full accent-black cursor-pointer"
+               />
+             </div>
+             
+             {/* Action */}
+             <button 
+               onClick={applyWhatIf}
+               disabled={!isTweaked || isLoading}
+               className={`w-full p-3 mt-4 border-4 border-black font-black uppercase transition-all flex justify-center items-center gap-2
+                 ${isTweaked && !isLoading ? 'bg-black text-white hover:bg-gray-800 shadow-neo-sm' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}
+               `}
+             >
+               {isLoading ? (
+                  <RefreshCw className="animate-spin" size={20} />
+               ) : (
+                 'Recalculate Probability'
+               )}
+             </button>
+           </div>
+        </div>
+      )}
+
     </div>
   );
 };

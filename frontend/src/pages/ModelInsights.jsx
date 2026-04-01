@@ -64,14 +64,15 @@ const ModelInsights = () => {
           As shown, over <strong className="bg-yellow-200 px-1 border border-black">71%</strong> of its entire predictive weight relies solely on the Discount threshold, while physical traits like product weight serve as secondary validation checks.
         </p>
 
-        <div className="h-96 w-full border-4 border-black bg-gray-50 p-4 shadow-inner">
+        <div className="h-[32rem] w-full border-4 border-black bg-gray-50 p-4 shadow-inner">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={insightData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
             >
               <XAxis 
                 dataKey="name" 
+                height={100}
                 tick={{ fill: 'black', fontWeight: 'bold' }} 
                 axisLine={{ stroke: 'black', strokeWidth: 4 }}
                 tickLine={{ stroke: 'black', strokeWidth: 4 }}
