@@ -1,44 +1,37 @@
 body {
     margin: 0;
     font-family: Arial;
+    transition: 0.3s;
 }
 
+/* DARK MODE */
+.dark {
+    background: #0f172a;
+    color: white;
+}
 
 .navbar {
     display: flex;
     justify-content: space-between;
     padding: 15px 40px;
-    background: #0f172a;
+    background: #3b82f6;
     color: white;
 }
-
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-}
-
 
 .hero {
     text-align: center;
-    padding: 80px 20px;
+    padding: 60px;
     background: linear-gradient(to right, #3b82f6, #06b6d4);
     color: white;
 }
 
 .btn {
     padding: 10px 20px;
-    background: white;
-    color: black;
-    text-decoration: none;
+    margin-top: 10px;
+    border: none;
     border-radius: 8px;
+    cursor: pointer;
 }
-
 
 .predict-section {
     padding: 40px;
@@ -49,51 +42,47 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    margin: 20px auto;
     max-width: 800px;
+    margin: auto;
 }
 
 input, select {
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
 button {
-    padding: 12px 20px;
+    padding: 12px;
     background: #3b82f6;
     color: white;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
 }
 
-
+/* RESULT */
 .result-box {
     margin-top: 20px;
     font-size: 20px;
-    font-weight: bold;
 }
 
-.success {
-    color: green;
+.bar {
+    height: 10px;
+    border-radius: 10px;
+    background: #ddd;
+    margin-top: 10px;
 }
 
-.danger {
-    color: red;
+.fill {
+    height: 100%;
+    border-radius: 10px;
 }
 
+.green { background: green; }
+.red { background: red; }
+.yellow { background: orange; }
 
-.about {
-    padding: 40px;
-    background: #f1f5f9;
-    text-align: center;
-}
-
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #0f172a;
-    color: white;
+/* HISTORY */
+.history {
+    margin-top: 20px;
+    font-size: 14px;
 }

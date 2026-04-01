@@ -1,30 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ShipmentSure</title>
+    <title>ShipmentSure Pro</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-
 <nav class="navbar">
-    <h2>🚚 ShipmentSure</h2>
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#predict">Predict</a></li>
-        <li><a href="#about">About</a></li>
-    </ul>
+    <h2>🚚 ShipmentSure Pro</h2>
+    <button id="toggleTheme">🌙</button>
 </nav>
 
-
 <section class="hero">
-    <h1>Predict Delivery Performance</h1>
-    <p>AI-powered system to check if your shipment will be on time</p>
-    <a href="#predict" class="btn">Start Prediction</a>
+    <h1>Smart Delivery Prediction</h1>
+    <p>AI-powered insights for shipment reliability</p>
+    <button onclick="fillSample()" class="btn">Use Sample Data</button>
 </section>
 
-
-<section id="predict" class="predict-section">
+<section class="predict-section">
 
     <h2>Enter Shipment Details</h2>
 
@@ -63,20 +56,9 @@
 
     <div id="result" class="result-box"></div>
 
+    <div id="history" class="history"></div>
+
 </section>
-
-<section id="about" class="about">
-    <h2>About ShipmentSure</h2>
-    <p>
-        ShipmentSure uses Machine Learning to predict whether a delivery will be on time 
-        based on logistics and customer data.
-    </p>
-</section>
-
-
-<footer>
-    <p>© 2026 ShipmentSure | Built with FastAPI & ML</p>
-</footer>
 
 <script src="/static/app.js"></script>
 </body>
