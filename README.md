@@ -7,6 +7,16 @@ https://new-shipment-prediction.vercel.app/
 ![Home Page Output](screenshots/output-home.png)
 ![Prediction Output](screenshots/output-prediction.png)
 
+## Target Labels
+Class 1 - On time Delivery
+Class 0 - Delayed Delivery
+Confidence - How sure the model is about its prediction
+## Insights
+If confidence is:
+>80% -> Strong prediction
+60-80% -> Medium confidence
+<60% -> Uncertain prediction
+
 ## Benefits to Use This Website
 - Predicts shipment delivery status quickly using supplier and logistics inputs.
 - Helps teams identify delay risks before shipment completion.
