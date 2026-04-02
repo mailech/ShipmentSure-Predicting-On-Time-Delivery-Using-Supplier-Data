@@ -3,7 +3,7 @@
 ## Deployment Link
 https://new-shipment-prediction.vercel.app/
 
-## Output SS
+## Output Screenshots
 ![Home Page Output](screenshots/output-home.png)
 ![Prediction Output](screenshots/output-prediction.png)
 
