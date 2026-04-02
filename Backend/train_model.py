@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 import pickle
 
@@ -19,10 +19,16 @@ for col in cat_cols:
 X = df.drop(columns=['Reached.on.Time_Y.N'])
 y = df['Reached.on.Time_Y.N']
 
-# Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+# Train XGBoost model
+model = XGBClassifier(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5,
+    random_state=42,
+    eval_metric='logloss'
+)
 model.fit(X, y)
 
 # Save model
 pickle.dump(model, open('model.pkl', 'wb'))
-print("✅ model.pkl saved successfully!")
+print("✅ XGBoost model.pkl saved successfully!")
