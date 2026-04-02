@@ -13,8 +13,8 @@ Class 0 - Delayed Delivery
 Confidence - How sure the model is about its prediction
 ## Insights
 If confidence is:
->80% -> Strong prediction
-60-80% -> Medium confidence
+>80% -> Strong prediction;
+60-80% -> Medium confidence;
 <60% -> Uncertain prediction
 
 ## Benefits to Use This Website
