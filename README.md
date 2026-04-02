@@ -8,9 +8,9 @@ https://new-shipment-prediction.vercel.app/
 ![Prediction Output](screenshots/output-prediction.png)
 
 ## Target Labels
-Class 1 - On time Delivery
-Class 0 - Delayed Delivery
-Confidence - How sure the model is about its prediction
+- Class 1 - On time Delivery
+- Class 0 - Delayed Delivery
+- Confidence - How sure the model is about its prediction
 ## Insights
 If confidence is:
 >80% -> Strong prediction;
