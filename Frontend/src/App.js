@@ -55,7 +55,7 @@ export default function App() {
     e.preventDefault();
     setLoading(true); setError(''); setVisible(false); setResult(null);
     try {
-      const res = await fetch('http://127.0.0.1:5000/predict', {
+      const res = await fetch('https://shipment-backend-98sg.onrender.com/predict', {
         method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form),
       });
       const data = await res.json();
