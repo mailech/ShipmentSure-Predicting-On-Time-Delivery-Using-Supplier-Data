@@ -1,5 +1,8 @@
 const historyBox = document.getElementById("history");
 
+// Make dark theme default
+document.body.classList.add("dark");
+
 document.getElementById("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -35,7 +38,6 @@ document.getElementById("form").addEventListener("submit", async function(e) {
         let color = "green";
         let risk = "Low Risk";
 
-        // ✅ CORRECT RISK LOGIC
         if (result.prediction_label === "Late") {
             if (confidence > 70) {
                 color = "red";
@@ -58,16 +60,17 @@ document.getElementById("form").addEventListener("submit", async function(e) {
         }
 
         resultDiv.innerHTML = `
-            <h3>${result.prediction_label}</h3>
+        <div class="card">
+            <h2>${result.prediction_label}</h2>
             <p>Confidence: ${confidenceText}%</p>
-            <p>Risk Level: ${risk}</p>
+            <p>${risk}</p>
 
-            <div class="bar">
-                <div class="fill ${color}" style="width:${confidence}%"></div>
+            <div class="progress">
+                <div class="progress-fill ${color}" style="width:${confidence}%"></div>
             </div>
+        </div>
         `;
 
-        // HISTORY
         const entry = `ID ${data.ID} → ${result.prediction_label} (${confidenceText}%)`;
         historyBox.innerHTML = entry + "<br>" + historyBox.innerHTML;
 
@@ -76,14 +79,10 @@ document.getElementById("form").addEventListener("submit", async function(e) {
     }
 });
 
-
-// 🌙 DARK MODE
 document.getElementById("toggleTheme").onclick = () => {
     document.body.classList.toggle("dark");
 };
 
-
-// ⚡ SAMPLE DATA
 function fillSample() {
     ID.value = 5000;
     Warehouse_block.value = "A";
@@ -97,3 +96,9 @@ function fillSample() {
     Discount_offered.value = 5;
     Weight_in_gms.value = 3000;
 }
+
+let total = 0;
+let late = 0;
+
+if (result.prediction_label === "Late") late++;
+total++;

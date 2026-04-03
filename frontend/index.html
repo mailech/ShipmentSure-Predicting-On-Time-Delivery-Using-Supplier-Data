@@ -4,7 +4,7 @@
     <title>ShipmentSure Pro</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="dark">
 
 <nav class="navbar">
     <h2>🚚 ShipmentSure Pro</h2>
@@ -12,7 +12,7 @@
 </nav>
 
 <section class="hero">
-    <h1>Smart Delivery Prediction</h1>
+    <h1>ShipmentSure Delivery Prediction</h1>
     <p>AI-powered insights for shipment reliability</p>
     <button onclick="fillSample()" class="btn">Use Sample Data</button>
 </section>
@@ -27,10 +27,12 @@
             <input type="number" id="ID" placeholder="Shipment ID">
             
             <select id="Warehouse_block">
+                <option value="" disabled selected hidden>Select Warehouse_block</option>
                 <option>A</option><option>B</option><option>C</option><option>D</option><option>F</option>
             </select>
 
             <select id="Mode_of_Shipment">
+                <option value="" disabled selected hidden>Select Mode of Shipment</option>
                 <option>Flight</option><option>Road</option><option>Ship</option>
             </select>
 
@@ -40,11 +42,14 @@
             <input type="number" id="Prior_purchases" placeholder="Prior Purchases">
 
             <select id="Product_importance">
+                <option value="" disabled selected hidden>Select product importance</option>
                 <option>low</option><option>medium</option><option>high</option>
             </select>
 
             <select id="Gender">
-                <option>M</option><option>F</option>
+                <option value="" disabled selected hidden>Select Gender</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
             </select>
 
             <input type="number" id="Discount_offered" placeholder="Discount">
@@ -59,7 +64,7 @@
     <div id="history" class="history"></div>
 
 </section>
-
+<div id="stats"></div>
 <script src="/static/app.js"></script>
 </body>
 </html>
