@@ -7,38 +7,55 @@
 
 <body>
 
-<div class="app">
-    <h1>🚀 ShipmentSure</h1>
+<div class="container">
+    <h1>ShipmentSure</h1>
 
-    <form id="form">
-        <input type="number" id="Customer_care_calls" placeholder="Customer Calls">
-        <input type="number" id="Customer_rating" placeholder="Rating">
-        <input type="number" id="Cost_of_the_Product" placeholder="Cost">
-        <input type="number" id="Prior_purchases" placeholder="Purchases">
-        <input type="number" id="Discount_offered" placeholder="Discount">
-        <input type="number" id="Weight_in_gms" placeholder="Weight">
+    <div class="form">
 
-        <select id="Gender">
-            <option value="M">Male</option>
-            <option value="F">Female</option>
+        <select id="warehouse">
+            <option value="A">Warehouse A</option>
+            <option value="B">Warehouse B</option>
+            <option value="C">Warehouse C</option>
+            <option value="D">Warehouse D</option>
         </select>
 
-        <select id="Warehouse_block">
-            <option>A</option><option>B</option><option>C</option>
+        <select id="mode">
+            <option value="Ship">Ship</option>
+            <option value="Flight">Flight</option>
+            <option value="Road">Road</option>
+        </select>
+        <input id="calls" type="number" placeholder="Customer Care Calls">
+        <input id="rating" type="number" placeholder="Customer Rating">
+        <input id="cost" type="number" placeholder="Cost of Product">
+        <input id="purchases" type="number" placeholder="Prior Purchases">
+        <select id="importance">
+            <option value="0">Low Importance</option>
+            <option value="1">Medium Importance</option>
+            <option value="2">High Importance</option>
+        </select>
+        <select id="gender">
+            <option value="1">Male</option>
+            <option value="2">Female</option>
         </select>
 
-        <select id="Mode_of_Shipment">
-            <option>Ship</option><option>Flight</option><option>Road</option>
-        </select>
+        <input id="discount" type="number" placeholder="Discount Offered">
+        <input id="weight" type="number" placeholder="Weight in grams">
 
-        <select id="Product_importance">
-            <option>low</option><option>medium</option><option>high</option>
-        </select>
+        <button onclick="predict()">Predict</button>
+    </div>
 
-        <button type="submit">Predict</button>
-    </form>
+    <div class="dashboard">
+        <div class="card">
+            <h3>📦 Delivery Status</h3>
+            <p id="status">--</p>
+        </div>
 
-    <h2 id="result"></h2>
+        <div class="card">
+            <h3>📊 Confidence</h3>
+            <p id="confidence">--</p>
+        </div>
+    </div>
+
 </div>
 
 <script src="/static/script.js"></script>

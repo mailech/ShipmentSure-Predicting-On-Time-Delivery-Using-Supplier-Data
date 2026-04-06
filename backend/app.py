@@ -1,141 +1,112 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
-import pandas as pd
+from flask import Flask, render_template, request, jsonify
 import pickle
+import pandas as pd
 import os
 
-app = FastAPI(title="ShipmentSure API")
-
 # -------------------------------
-# CORS
-# -------------------------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# -------------------------------
-# PATH SETUP (FIXED)
-# -------------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
-MODEL_DIR = os.path.join(BASE_DIR, "models")
-
-# Static files (CSS + JS)
-app.mount(
-    "/static",
-    StaticFiles(directory=os.path.join(FRONTEND_DIR, "static")),
-    name="static"
-)
-
-# -------------------------------
-# LOAD MODEL + PREPROCESSOR
-# -------------------------------
-model = None
-preprocessor = None
-
-@app.on_event("startup")
-def load_files():
-    global model, preprocessor
-
-    try:
-        model_path = os.path.join(MODEL_DIR, "best_xgb.pkl")
-        preprocessor_path = os.path.join(MODEL_DIR, "preprocessor.pkl")
-
-        if not os.path.exists(model_path):
-            print("❌ Model not found:", model_path)
-        else:
-            with open(model_path, "rb") as f:
-                model = pickle.load(f)
-
-        if not os.path.exists(preprocessor_path):
-            print("❌ Preprocessor not found:", preprocessor_path)
-        else:
-            with open(preprocessor_path, "rb") as f:
-                preprocessor = pickle.load(f)
-
-        print("✅ Model & Preprocessor Loaded")
-
-    except Exception as e:
-        print("❌ Error loading files:", e)
-
-# -------------------------------
-# INPUT SCHEMA
-# -------------------------------
-class ShipmentInput(BaseModel):
-    Warehouse_block: str
-    Mode_of_Shipment: str
-    Customer_care_calls: int
-    Customer_rating: int
-    Cost_of_the_Product: float
-    Prior_purchases: int
-    Product_importance: str
-    Gender: str
-    Discount_offered: float
-    Weight_in_gms: float
-
-# -------------------------------
-# ROUTES
+# PATH SETUP
 # -------------------------------
 
-# ✅ Serve HTML (NO JINJA)
-@app.get("/")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TEMPLATE_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "templates"))
+STATIC_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "static"))
+
+# 👉 Change this if using RF model
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "models", "best_xgb.pkl"))
+
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
+
+# -------------------------------
+# LOAD MODEL (PIPELINE)
+# -------------------------------
+
+with open(MODEL_PATH, "rb") as f:
+    model = pickle.load(f)
+
+print("✅ Model loaded successfully")
+print("Model type:", type(model))
+
+# -------------------------------
+# HOME ROUTE
+# -------------------------------
+
+@app.route("/")
 def home():
-    file_path = os.path.join(FRONTEND_DIR, "templates", "index.html")
-    return FileResponse(file_path)
+    return render_template("index.html")
 
-# Status check
-@app.get("/status")
-def status():
-    return {
-        "model_loaded": model is not None,
-        "preprocessor_loaded": preprocessor is not None
-    }
 
-# Prediction API
-@app.post("/predict")
-def predict(data: ShipmentInput):
-    if model is None or preprocessor is None:
-        raise HTTPException(status_code=500, detail="Model or preprocessor not loaded")
+# -------------------------------
+# PREDICTION ROUTE
+# -------------------------------
 
+@app.route("/predict", methods=["POST"])
+def predict():
     try:
-        # Convert input to DataFrame
-        df = pd.DataFrame([data.dict()])
+        data = request.json
 
-        # Apply preprocessing
-        processed = preprocessor.transform(df)
+        # -------------------------------
+        # SAFE CONVERSION FUNCTIONS
+        # -------------------------------
+        def to_float(val):
+            try:
+                return float(val)
+            except:
+                return 0.0
 
-        # Predict
-        prediction = int(model.predict(processed)[0])
+        # -------------------------------
+        # RAW INPUT (NO ENCODING HERE)
+        # -------------------------------
+        input_df = pd.DataFrame([{
+            "Warehouse_block": data.get("warehouse"),
+            "Mode_of_Shipment": data.get("mode"),
+            "Customer_care_calls": to_float(data.get("calls")),
+            "Customer_rating": to_float(data.get("rating")),
+            "Cost_of_the_Product": to_float(data.get("cost")),
+            "Prior_purchases": to_float(data.get("purchases")),
+            "Product_importance": data.get("importance"),
+            "Gender": data.get("gender"),
+            "Discount_offered": to_float(data.get("discount")),
+            "Weight_in_gms": to_float(data.get("weight"))
+        }])
 
-        # Confidence
-        if hasattr(model, "predict_proba"):
-            prob = model.predict_proba(processed)[0]
-            confidence = float(max(prob))
-        else:
-            confidence = None
+        print("\n📥 Incoming Data:")
+        print(input_df)
 
-        result = "On Time ✅" if prediction == 1 else "Delayed ❌"
+        # -------------------------------
+        # PREDICTION (PIPELINE HANDLES ALL)
+        # -------------------------------
+        prediction = model.predict(input_df)[0]
 
-        return {
+        # -------------------------------
+        # CONFIDENCE SCORE
+        # -------------------------------
+        try:
+            prob = model.predict_proba(input_df)[0][1]
+            confidence = f"{round(prob * 100, 2)}%"
+        except:
+            confidence = "N/A"
+
+        # -------------------------------
+        # RESULT LABEL
+        # -------------------------------
+        result = "On Time" if prediction == 1 else "Delayed"
+
+        return jsonify({
             "prediction": result,
             "confidence": confidence
-        }
+        })
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        print("❌ ERROR:", e)
+        return jsonify({
+            "error": str(e)
+        })
 
 
 # -------------------------------
-# RUN SERVER
+# RUN APP
 # -------------------------------
+
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
+    app.run(debug=True)
