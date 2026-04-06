@@ -100,3 +100,5 @@ jupyter notebook
 **Student:** Rahel Benjamin  
 **Project:** ShipmentSure — Infosys Springboard  
 **Last Updated:** March 2026
+
+Deployment link: https://shipment-sure.vercel.app/
