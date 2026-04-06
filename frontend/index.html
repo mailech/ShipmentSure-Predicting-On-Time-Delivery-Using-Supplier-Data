@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ShipmentSure AI</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0b0f1a, #020617);
+    color: #fff;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+}
+
+/* Card */
+.card {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0,255,200,0.1);
+}
+
+/* Title */
+.title {
+    color: #00ffd5;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: #0f172a;
+    color: white;
+    transition: 0.3s;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 10px #00ffd5;
+}
+
+/* Slider */
+.slider {
+    width: 100%;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(90deg, #00ffd5, #00aaff);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Result box */
+.result-box {
+    text-align: center;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px dashed #00ffd5;
+}
+
+/* Success */
+.success {
+    border-color: #00ffae;
+    color: #00ffae;
+}
+
+/* Error */
+.error {
+    border-color: #ff4d6d;
+    color: #ff4d6d;
+}
+
+/* Icon */
+.icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* Progress */
+.progress {
+    height: 6px;
+    background: #1f2937;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.bar {
+    height: 100%;
+    background: #00ffd5;
+    border-radius: 10px;
+}
+
+/* Risk rows */
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    background: #0f172a;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Tags */
+.tag {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+.low { background: #064e3b; color: #00ffae; }
+.med { background: #78350f; color: orange; }
+.high { background: #7f1d1d; color: red; }
+
+/* Responsive */
+@media(max-width:600px){
+    .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- INPUT -->
+<div class="card">
+<div class="title">SHIPMENT INPUT PARAMETERS</div>
+
+<div class="grid">
+<select id="warehouse">
+<option value="A">Block A</option>
+<option value="B">Block B</option>
+<option value="C">Block C</option>
+</select>
+
+<select id="mode">
+<option value="Ship">🚢 Ship</option>
+<option value="Flight">✈️ Flight</option>
+<option value="Road">🚚 Road</option>
+</select>
+
+<select id="importance">
+<option value="low">Low</option>
+<option value="medium">Medium</option>
+<option value="high">High</option>
+</select>
+
+<select id="gender">
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
+
+<input id="calls" placeholder="Customer Care Calls">
+<input id="rating" placeholder="Customer Rating">
+<input id="cost" placeholder="Cost of Product">
+<input id="prior" placeholder="Prior Purchases">
+<input id="discount" placeholder="Discount %">
+<input id="weight" placeholder="Weight (g)">
+</div>
+
+<button onclick="predict()">⚡ Predict Delivery Outcome</button>
+</div>
+
+<!-- RESULT -->
+<div class="card">
+<div class="title">PREDICTION RESULT</div>
+
+<div id="resultBox" class="result-box">
+Waiting for prediction...
+</div>
+
+<div class="title">CONFIDENCE SCORE</div>
+<div class="progress">
+<div id="bar" class="bar" style="width:0%"></div>
+</div>
+
+<div class="title">KEY RISK FACTORS</div>
+<div id="risk"></div>
+
+</div>
+
+</div>
+
+<script>
+function predict() {
+
+const data = {
+Warehouse_block: document.getElementById('warehouse').value,
+Mode_of_Shipment: document.getElementById('mode').value,
+Customer_care_calls: parseInt(document.getElementById('calls').value),
+Customer_rating: parseInt(document.getElementById('rating').value),
+Cost_of_the_Product: parseFloat(document.getElementById('cost').value),
+Prior_purchases: parseInt(document.getElementById('prior').value),
+Product_importance: document.getElementById('importance').value,
+Gender: document.getElementById('gender').value,
+Discount_offered: parseFloat(document.getElementById('discount').value),
+Weight_in_gms: parseFloat(document.getElementById('weight').value)
+};
+
+fetch("http://127.0.0.1:8000/predict", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(d => {
+
+let box = document.getElementById("resultBox");
+
+let icon = d.status.includes("On Time") ? "✅" : "⚠️";
+
+box.innerHTML = `
+<div class="icon">${icon}</div>
+<h2>${d.status}</h2>
+<p>Confidence: ${d.confidence_percent}</p>
+<p>${d.confidence_level}</p>
+`;
+
+box.className = d.status.includes("On Time")
+? "result-box success"
+: "result-box error";
+
+document.getElementById("bar").style.width = d.confidence_percent;
+
+let risk = `
+<div class="row">Discount ${data.Discount_offered}% <span class="tag ${data.Discount_offered>70?'high':'low'}">${data.Discount_offered>70?'HIGH':'LOW'}</span></div>
+<div class="row">Weight ${data.Weight_in_gms}g <span class="tag ${data.Weight_in_gms>3000?'high':'low'}">${data.Weight_in_gms>3000?'HIGH':'LOW'}</span></div>
+<div class="row">Calls ${data.Customer_care_calls} <span class="tag ${data.Customer_care_calls>4?'high':'low'}">${data.Customer_care_calls>4?'HIGH':'LOW'}</span></div>
+<div class="row">Mode ${data.Mode_of_Shipment} <span class="tag med">MED</span></div>
+`;
+
+document.getElementById("risk").innerHTML = risk;
+
+});
+}
+</script>
+
+</body>
+</html>
