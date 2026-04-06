@@ -3,23 +3,15 @@ import pickle
 import pandas as pd
 import os
 
-# -------------------------------
-# PATH SETUP
-# -------------------------------
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 TEMPLATE_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "templates"))
 STATIC_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "static"))
 
-# 👉 Change this if using RF model
+
 MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "models", "best_xgb.pkl"))
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
-
-# -------------------------------
-# LOAD MODEL (PIPELINE)
-# -------------------------------
 
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
@@ -27,18 +19,11 @@ with open(MODEL_PATH, "rb") as f:
 print("✅ Model loaded successfully")
 print("Model type:", type(model))
 
-# -------------------------------
-# HOME ROUTE
-# -------------------------------
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
-# -------------------------------
-# PREDICTION ROUTE
-# -------------------------------
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -54,9 +39,7 @@ def predict():
             except:
                 return 0.0
 
-        # -------------------------------
-        # RAW INPUT (NO ENCODING HERE)
-        # -------------------------------
+
         input_df = pd.DataFrame([{
             "Warehouse_block": data.get("warehouse"),
             "Mode_of_Shipment": data.get("mode"),
@@ -73,23 +56,16 @@ def predict():
         print("\n📥 Incoming Data:")
         print(input_df)
 
-        # -------------------------------
-        # PREDICTION (PIPELINE HANDLES ALL)
-        # -------------------------------
+
         prediction = model.predict(input_df)[0]
 
-        # -------------------------------
-        # CONFIDENCE SCORE
-        # -------------------------------
+
         try:
             prob = model.predict_proba(input_df)[0][1]
             confidence = f"{round(prob * 100, 2)}%"
         except:
             confidence = "N/A"
 
-        # -------------------------------
-        # RESULT LABEL
-        # -------------------------------
         result = "On Time" if prediction == 1 else "Delayed"
 
         return jsonify({
@@ -103,10 +79,6 @@ def predict():
             "error": str(e)
         })
 
-
-# -------------------------------
-# RUN APP
-# -------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
